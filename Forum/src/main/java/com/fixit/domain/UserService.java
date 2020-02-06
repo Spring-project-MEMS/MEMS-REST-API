@@ -10,7 +10,7 @@ public interface UserService  extends UserDetailsService {
     User findById(Long id);
     User findByUsername(String username);
     User add(User user);
-//    User update(User user);
+    User update(User user);
     User remove(Long id);
     long count();
 }
