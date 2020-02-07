@@ -1,19 +1,26 @@
 package com.fixit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "ward")
+@JsonIgnoreProperties({"doctors", "appointments", "examinations", "results"})
 public class Ward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.User.class)
     private Long id;
 
     @Column(name = "ward_name", nullable = false, length = 50)
+    @JsonView(Views.User.class)
     private String wardName;
 
     @Column(name = "room_number", nullable = false, length = 20)
+    @JsonView(Views.User.class)
     private String roomNumber;
 
     @OneToMany(

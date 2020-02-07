@@ -1,13 +1,21 @@
 package com.fixit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @Entity
 @Table(name = "user")
+//, "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "enabled"
+@JsonIgnoreProperties({"appointments", "examinations", "results"})
+@JsonView(Views.User.class)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,6 +69,8 @@ public class User implements UserDetails {
     )
     private Set<Result> results;
 
+    @Transient
+    private String wardName;
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
     private boolean isEnabled;
@@ -87,10 +97,12 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return this.password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
@@ -136,10 +148,12 @@ public class User implements UserDetails {
         this.egn = egn;
     }
 
+    @JsonProperty
     public Ward getWard() {
         return ward;
     }
 
+    @JsonIgnore
     public void setWard(Ward ward) {
         this.ward = ward;
     }
@@ -169,37 +183,45 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonProperty
     public boolean isAccountNonExpired() {
         return this.isAccountNonExpired;
     }
 
+    @JsonProperty
     public void setAccountNonExpired(boolean accountNonExpired) {
         isAccountNonExpired = accountNonExpired;
     }
 
     @Override
+    @JsonProperty
     public boolean isAccountNonLocked() {
         return this.isAccountNonLocked;
     }
 
+    @JsonProperty
     public void setAccountNonLocked(boolean accountNonLocked) {
         isAccountNonLocked = accountNonLocked;
     }
 
     @Override
+    @JsonProperty
     public boolean isCredentialsNonExpired() {
         return this.isCredentialsNonExpired;
     }
 
+    @JsonProperty
     public void setCredentialsNonExpired(boolean credentialsNonExpired) {
         isCredentialsNonExpired = credentialsNonExpired;
     }
 
     @Override
+    @JsonProperty
     public boolean isEnabled() {
         return this.isEnabled;
     }
 
+    @JsonProperty
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }
@@ -209,5 +231,26 @@ public class User implements UserDetails {
             this.authorities = new HashSet<>();
         }
         this.authorities.add(role);
+    }
+
+    @JsonIgnore
+    public String getWardName() {
+        return wardName;
+    }
+
+    @JsonProperty
+    public void setWardName(String wardName) {
+        this.wardName = wardName;
+    }
+
+
+    public boolean hasDoctorRights(){
+        Iterator<Role> it = authorities.iterator();
+        while(it.hasNext()){
+            if (it.next().getAuthority().equals("DOCTOR")){
+                return true;
+            }
+        }
+        return false;
     }
 }

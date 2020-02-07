@@ -5,12 +5,14 @@ import com.fixit.exception.InvalidEntityException;
 import com.fixit.exception.NonexistingEntityException;
 import com.fixit.model.Role;
 import com.fixit.model.User;
+import com.fixit.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +23,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private WardService wardService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -62,10 +67,25 @@ public class UserServiceImpl implements UserService{
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
         user.setEnabled(true);
+        user.getAuthorities().forEach((role) -> {  Role existingRole = roleService.findById(role.getId());
+            if (!existingRole.getAuthority().equals(role.getAuthority()))
+            {throw new InvalidEntityException(String.format("Invalid role with authority %s", role.getAuthority()));}
+        });
         user.setExaminations(null);
         user.setResults(null);
-        //TODO must change when wardService is ready. TO check if this ward exists and if role of user is DOCTOR. Otherwise throw EXC
-        user.setWard(null);
+        user.setAppointments(null);
+        if (user.hasDoctorRights()){
+            Ward ward = wardService.findByWardName(user.getWardName());
+            user.setWard(ward);
+        }
+        else{
+            if (user.getWardName() != null)
+            {
+                throw new InvalidEntityException(String.format("Invalid entity non doctors doesn't belong to ward"));
+            }else {
+                user.setWard(null);
+            }
+        }
         return userRepository.save(user);
     }
 
@@ -76,16 +96,26 @@ public class UserServiceImpl implements UserService{
         {
             throw new NonexistingEntityException(String.format("There is no user with id '%d'",user.getId()));
         }
-//        if (!user.getAuthorities().isEmpty() && user.getWard() != null) {
-//
-//        }
+
         user.getAuthorities().forEach((role) -> {  Role existingRole = roleService.findById(role.getId());
             if (!existingRole.getAuthority().equals(role.getAuthority()))
-            {throw new InvalidEntityException(String.format("Invalid role"));} });
+            {throw new InvalidEntityException(String.format("Invalid role with authority %s", role.getAuthority()));}
+        });
         user.setResults(oldUser.get().getResults());
         user.setExaminations(oldUser.get().getExaminations());
-        //TODO must change when wardService is ready. TO check if this ward exists and if role of user is DOCTOR. Otherwise throw EXC
-        user.setWard(oldUser.get().getWard());
+        user.setAppointments(oldUser.get().getAppointments());
+        if (user.hasDoctorRights()){
+            Ward ward = wardService.findByWardName(user.getWardName());
+            user.setWard(ward);
+        }
+        else{
+            if (user.getWardName() != null)
+            {
+                throw new InvalidEntityException(String.format("Invalid entity non doctors doesn't belong to ward"));
+            }else {
+                user.setWard(null);
+            }
+        }
         return userRepository.save(user);
     }
 
