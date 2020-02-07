@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="30f6a804-7638-4b58-9e58-611f5ca1f614" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/fixit/domain/WardService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/fixit/domain/WardServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/fixit/model/Views.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fixit/domain/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fixit/domain/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fixit/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fixit/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fixit/model/Ward.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fixit/model/Ward.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/fixit/domain/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/fixit/domain/UserServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/fixit/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/fixit/model/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/fixit/model/Ward.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/fixit/model/Ward.class" afterDir="false" />
-    </list>
+    <list default="true" id="30f6a804-7638-4b58-9e58-611f5ca1f614" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -234,7 +223,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/fixit/model/User.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
+            <state relative-caret-position="2771">
               <caret line="223" column="17" lean-forward="true" selection-start-line="223" selection-start-column="17" selection-end-line="223" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -547,7 +536,7 @@
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1581099514313" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1581099758162" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -620,12 +609,12 @@
       <workItem from="1580925450790" duration="619000" />
       <workItem from="1580926311712" duration="12912000" />
       <workItem from="1580943075567" duration="5063000" />
-      <workItem from="1581084968816" duration="10242000" />
+      <workItem from="1581084968816" duration="10640000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="172285000" />
+    <option name="totallyTimeSpent" value="172683000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -638,7 +627,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.32299545" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -651,7 +639,7 @@
       <window_info id="Web" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.42295083" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.13934426" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.46885246" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.2704918" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1065,7 +1053,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/fixit/model/User.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
+        <state relative-caret-position="2771">
           <caret line="223" column="17" lean-forward="true" selection-start-line="223" selection-start-column="17" selection-end-line="223" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
