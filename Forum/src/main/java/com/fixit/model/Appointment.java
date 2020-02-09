@@ -1,9 +1,14 @@
 package com.fixit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "appointment")
+@JsonIgnoreProperties({"examinations", "patient"})
 public class Appointment {
 
     @Id
@@ -36,18 +41,24 @@ public class Appointment {
         this.id = id;
     }
 
+
+    @JsonProperty
     public User getPatient() {
         return patient;
     }
 
+    @JsonIgnore
     public void setPatient(User patient) {
         this.patient = patient;
     }
 
+
+    @JsonProperty
     public Ward getWard() {
         return ward;
     }
 
+    @JsonIgnore
     public void setWard(Ward ward) {
         this.ward = ward;
     }
