@@ -11,6 +11,7 @@ public interface AppointmentService {
     Appointment add(Appointment ward);
     Appointment update(Appointment ward);
     Appointment remove(Long id);
+    boolean checkAvailability(String date, String time);
     long count();
 
 }

@@ -59,7 +59,6 @@ public class Appointment {
         this.patient = patient;
     }
 
-
     @JsonProperty
     public Ward getWard() {
         return ward;

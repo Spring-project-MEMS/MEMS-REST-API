@@ -1,10 +1,15 @@
 package com.fixit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "result")
+@JsonIgnoreProperties({"examination"})
 public class Result {
 
     @Id
@@ -29,6 +34,11 @@ public class Result {
 
     private String time;
 
+    @Transient
+    private String wardName;
+    @Transient
+    private String egn;
+
     public Result() {
     }
 
@@ -48,18 +58,22 @@ public class Result {
         this.description = description;
     }
 
+    @JsonProperty
     public User getPatient() {
         return patient;
     }
 
+    @JsonIgnore
     public void setPatient(User patient) {
         this.patient = patient;
     }
 
+    @JsonProperty
     public Ward getWard() {
         return ward;
     }
 
+    @JsonIgnore
     public void setWard(Ward ward) {
         this.ward = ward;
     }
@@ -86,5 +100,25 @@ public class Result {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    @JsonIgnore
+    public String getWardName() {
+        return wardName;
+    }
+
+    @JsonProperty
+    public void setWardName(String wardName) {
+        this.wardName = wardName;
+    }
+
+    @JsonIgnore
+    public String getEgn() {
+        return egn;
+    }
+
+    @JsonProperty
+    public void setEgn(String egn) {
+        this.egn = egn;
     }
 }

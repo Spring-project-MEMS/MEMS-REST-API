@@ -258,4 +258,14 @@ public class User implements UserDetails {
         }
         return false;
     }
+
+    public boolean isPatient(){
+        Iterator<Role> it = authorities.iterator();
+        while(it.hasNext()){
+            if (it.next().getAuthority().equals("PATIENT")){
+                return true;
+            }
+        }
+        return false;
+    }
 }

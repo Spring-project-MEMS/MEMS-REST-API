@@ -1,8 +1,8 @@
 package com.fixit.web;
 
-import com.fixit.domain.UserService;
+import com.fixit.domain.ExaminationService;
 import com.fixit.exception.InvalidEntityException;
-import com.fixit.model.User;
+import com.fixit.model.Examination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,19 +13,19 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/users")
-public class UserController {
+@RequestMapping("api/examinations")
+public class ExaminationController {
 
     @Autowired
-    private UserService userService;
+    private ExaminationService examinationService;
 
     @GetMapping
-    public List<User> getAllUsers(){
-        return userService.findAll();
+    public List<Examination> getAllExaminations(){
+        return examinationService.findAll();
     }
 
     @PostMapping
-    public ResponseEntity<User> addUser(@Valid @RequestBody User user, BindingResult bindingResult)
+    public ResponseEntity<Examination> addExamination(@Valid @RequestBody Examination examination, BindingResult bindingResult)
     {
         if(bindingResult.hasFieldErrors()) {
             String  message = bindingResult.getFieldErrors().stream()
@@ -35,19 +35,19 @@ public class UserController {
             throw new InvalidEntityException(message);
         }
 
-        User created = userService.add(user);
+        Examination created = examinationService.add(examination);
         return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
                 .pathSegment("{id}").build(created.getId())).body(created);
     }
 
     @GetMapping("{id}")
-    public User getUserById(@PathVariable Long id)
+    public Examination getExaminationById(@PathVariable Long id)
     {
-        return userService.findById(id);
+        return examinationService.findById(id);
     }
 
     @PutMapping("{id}")
-    public User updateUser(@PathVariable Long id,@Valid @RequestBody User user,BindingResult bindingResult)
+    public Examination updateExamination(@PathVariable Long id,@Valid @RequestBody Examination examination,BindingResult bindingResult)
     {
         if(bindingResult.hasFieldErrors()) {
             String  message = bindingResult.getFieldErrors().stream()
@@ -57,16 +57,16 @@ public class UserController {
             throw new InvalidEntityException(message);
         }
 
-        if(id != user.getId())
+        if(id != examination.getId())
         {
-            throw new InvalidEntityException(String.format("Entity ID = '%d' is different from URL resource ID='%d'",user.getId(),id));
+            throw new InvalidEntityException(String.format("Entity ID = '%d' is different from URL resource ID='%d'",examination.getId(),id));
         }
-        return userService.update(user);
+        return examinationService.update(examination);
     }
 
     @DeleteMapping("{id}")
-    public User removeUser(@PathVariable Long id)
+    public Examination removeAppointment(@PathVariable Long id)
     {
-        return userService.remove(id);
+        return examinationService.remove(id);
     }
 }

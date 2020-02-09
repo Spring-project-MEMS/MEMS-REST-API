@@ -1,9 +1,14 @@
 package com.fixit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "examination")
+@JsonIgnoreProperties({"appointment", "result"})
 public class Examination {
 
     @Id
@@ -33,6 +38,13 @@ public class Examination {
 
     private String time;
 
+    @Transient
+    private String wardName;
+    @Transient
+    private String egn;
+    @Transient
+    private Long appointmentId;
+
     public Examination() {
     }
 
@@ -52,18 +64,22 @@ public class Examination {
         this.status = status;
     }
 
+    @JsonProperty
     public Ward getWard() {
         return ward;
     }
 
+    @JsonIgnore
     public void setWard(Ward ward) {
         this.ward = ward;
     }
 
+    @JsonProperty
     public User getPatient() {
         return patient;
     }
 
+    @JsonIgnore
     public void setPatient(User patient) {
         this.patient = patient;
     }
@@ -98,5 +114,35 @@ public class Examination {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    @JsonIgnore
+    public String getWardName() {
+        return wardName;
+    }
+
+    @JsonProperty
+    public void setWardName(String wardName) {
+        this.wardName = wardName;
+    }
+
+    @JsonIgnore
+    public String getEgn() {
+        return egn;
+    }
+
+    @JsonProperty
+    public void setEgn(String egn) {
+        this.egn = egn;
+    }
+
+    @JsonIgnore
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
+    @JsonProperty
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class AppointmentServiceImpl implements AppointmentService{
 
@@ -36,12 +37,22 @@ public class AppointmentServiceImpl implements AppointmentService{
 
     @Override
     public Appointment add(Appointment appointment) {
-        //TODO check if hour is available
+        if(!appointment.getTime().substring(3).equals("00")){
+            throw new InvalidEntityException(String.format("Invalid time for appointment %s"
+                    , appointment.getTime()));
+        }
+        if (!checkAvailability(appointment.getDate(), appointment.getTime())){
+            throw new InvalidEntityException(String.format("These date %s and time %s are already booked"
+                    , appointment.getDate(), appointment.getTime()));
+        }
         User user = userService.findByEgn(appointment.getEgn());
+        if (!user.isPatient()){
+            throw new InvalidEntityException(String.format("These egn %s don't belong to patient in the system"
+                    , user.getEgn()));
+        }
         appointment.setPatient(user);
         Ward ward = wardService.findByWardName(appointment.getWardName());
         appointment.setWard(ward);
-        //TODO create examination here
         return appointmentRepository.save(appointment);
     }
 
@@ -52,12 +63,19 @@ public class AppointmentServiceImpl implements AppointmentService{
         {
             throw new NonexistingEntityException(String.format("There is no appointment with id '%d'",appointment.getId()));
         }
-
+        List<Appointment> appointments = appointmentRepository.findAllByDateAndTime(appointment.getDate(), appointment.getTime());
+        if (!appointments.isEmpty()){
+            throw new InvalidEntityException(String.format("These date %s and time %s are already booked"
+                    , appointment.getDate(), appointment.getTime()));
+        }
         User user = userService.findByEgn(appointment.getEgn());
+        if (!user.isPatient()){
+            throw new InvalidEntityException(String.format("These egn %s don't belong to patient in the system"
+                    , user.getEgn()));
+        }
         appointment.setPatient(user);
         Ward ward = wardService.findByWardName(appointment.getWardName());
         appointment.setWard(ward);
-        //TODO update examination here
         return appointmentRepository.save(appointment);
     }
 
@@ -75,5 +93,11 @@ public class AppointmentServiceImpl implements AppointmentService{
     @Override
     public long count() {
         return appointmentRepository.count();
+    }
+
+    @Override
+    public boolean checkAvailability(String date, String time) {
+        List<Appointment> appointments = appointmentRepository.findAllByDateAndTime(date, time);
+        return appointments.isEmpty();
     }
 }
