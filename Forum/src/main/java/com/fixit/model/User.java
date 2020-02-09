@@ -19,20 +19,25 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({Views.Appointment.class})
     private Long id;
 
     private String password;
 
     @Column(unique = true)
+    @JsonView({Views.Appointment.class})
     private String username;
 
     private String email;
 
     @Column(name = "first_name", nullable = true, length = 50)
+    @JsonView({Views.Appointment.class})
     private String firstName;
     @Column(name = "last_name", nullable = true, length = 50)
+    @JsonView({Views.Appointment.class})
     private String lastName;
     @Column(name = "egn", unique = true, nullable = true, length = 20)
+    @JsonView({Views.Appointment.class})
     private String egn;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -49,7 +54,7 @@ public class User implements UserDetails {
             mappedBy = "patient",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
     private Set<Appointment> appointments;
 
@@ -57,7 +62,7 @@ public class User implements UserDetails {
             mappedBy = "patient",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
     private Set<Examination> examinations;
 
@@ -65,7 +70,7 @@ public class User implements UserDetails {
             mappedBy = "patient",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
     private Set<Result> results;
 

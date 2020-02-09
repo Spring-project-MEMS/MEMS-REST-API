@@ -1,17 +1,27 @@
 package com.fixit.domain;
 
 import com.fixit.dao.AppointmentRepository;
+import com.fixit.exception.InvalidEntityException;
 import com.fixit.exception.NonexistingEntityException;
 import com.fixit.model.Appointment;
+import com.fixit.model.User;
+import com.fixit.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class AppointmentServiceImpl implements AppointmentService{
 
     @Autowired
     private  AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private  WardService wardService;
+
+    @Autowired
+    private  UserService userService;
 
     @Override
     public List<Appointment> findAll() {
@@ -26,6 +36,12 @@ public class AppointmentServiceImpl implements AppointmentService{
 
     @Override
     public Appointment add(Appointment appointment) {
+        //TODO check if hour is available
+        User user = userService.findByEgn(appointment.getEgn());
+        appointment.setPatient(user);
+        Ward ward = wardService.findByWardName(appointment.getWardName());
+        appointment.setWard(ward);
+        //TODO create examination here
         return appointmentRepository.save(appointment);
     }
 
@@ -36,6 +52,12 @@ public class AppointmentServiceImpl implements AppointmentService{
         {
             throw new NonexistingEntityException(String.format("There is no appointment with id '%d'",appointment.getId()));
         }
+
+        User user = userService.findByEgn(appointment.getEgn());
+        appointment.setPatient(user);
+        Ward ward = wardService.findByWardName(appointment.getWardName());
+        appointment.setWard(ward);
+        //TODO update examination here
         return appointmentRepository.save(appointment);
     }
 

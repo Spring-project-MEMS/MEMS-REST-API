@@ -12,22 +12,22 @@ import java.util.Set;
 public class Ward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.User.class)
+    @JsonView({Views.User.class, Views.Appointment.class})
     private Long id;
 
     @Column(name = "ward_name", nullable = false, length = 50)
-    @JsonView(Views.User.class)
+    @JsonView({Views.User.class, Views.Appointment.class})
     private String wardName;
 
     @Column(name = "room_number", nullable = false, length = 20)
-    @JsonView(Views.User.class)
+    @JsonView({Views.User.class, Views.Appointment.class})
     private String roomNumber;
 
     @OneToMany(
             mappedBy = "ward",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
     private Set<User> doctors;
 
@@ -35,7 +35,7 @@ public class Ward {
             mappedBy = "ward",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
     private Set<Appointment> appointments;
 
@@ -43,7 +43,7 @@ public class Ward {
             mappedBy = "ward",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
     private Set<Examination> examinations;
 
@@ -51,7 +51,7 @@ public class Ward {
             mappedBy = "ward",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
     private Set<Result> results;
 

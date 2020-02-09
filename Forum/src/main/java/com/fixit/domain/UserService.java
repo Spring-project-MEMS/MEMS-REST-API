@@ -9,6 +9,7 @@ public interface UserService  extends UserDetailsService {
     List<User> findAll();
     User findById(Long id);
     User findByUsername(String username);
+    User findByEgn(String egn);
     User add(User user);
     User update(User user);
     User remove(Long id);

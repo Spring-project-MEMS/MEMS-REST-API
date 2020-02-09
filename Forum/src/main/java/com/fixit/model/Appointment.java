@@ -3,12 +3,14 @@ package com.fixit.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "appointment")
-@JsonIgnoreProperties({"examinations", "patient"})
+@JsonIgnoreProperties({"examination"})
+@JsonView(Views.Appointment.class)
 public class Appointment {
 
     @Id
@@ -29,6 +31,11 @@ public class Appointment {
     private String date;
 
     private String time;
+
+    @Transient
+    private String wardName;
+    @Transient
+    private String egn;
 
     public Appointment() {
     }
@@ -85,5 +92,25 @@ public class Appointment {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    @JsonIgnore
+    public String getWardName() {
+        return wardName;
+    }
+
+    @JsonProperty
+    public void setWardName(String wardName) {
+        this.wardName = wardName;
+    }
+
+    @JsonIgnore
+    public String getEgn() {
+        return egn;
+    }
+
+    @JsonProperty
+    public void setEgn(String egn) {
+        this.egn = egn;
     }
 }

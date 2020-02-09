@@ -52,6 +52,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User findByEgn(String egn) {
+        User user = userRepository.findByEgn(egn);
+        if(user == null){
+            throw new NonexistingEntityException(
+                    String.format("User with egn='%s' does not exist.", egn));
+        }
+        return user;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = this.userRepository.findOneByUsername(username);
         if (user == null) {
