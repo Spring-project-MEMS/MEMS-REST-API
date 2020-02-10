@@ -44,6 +44,8 @@ public class Examination {
     private String egn;
     @Transient
     private Long appointmentId;
+    @Transient
+    private Long resultId;
 
     public Examination() {
     }
@@ -144,5 +146,15 @@ public class Examination {
     @JsonProperty
     public void setAppointmentId(Long appointmentId) {
         this.appointmentId = appointmentId;
+    }
+
+    @JsonIgnore
+    public Long getResultId() {
+        return resultId;
+    }
+
+    @JsonProperty
+    public void setResultId(Long resultId) {
+        this.resultId = resultId;
     }
 }

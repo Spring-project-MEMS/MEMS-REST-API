@@ -53,6 +53,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointment.setPatient(user);
         Ward ward = wardService.findByWardName(appointment.getWardName());
         appointment.setWard(ward);
+        appointment.setExamination(null);
         return appointmentRepository.save(appointment);
     }
 
@@ -63,6 +64,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         {
             throw new NonexistingEntityException(String.format("There is no appointment with id '%d'",appointment.getId()));
         }
+        appointment.setExamination(oldAppointment.get().getExamination());
         List<Appointment> appointments = appointmentRepository.findAllByDateAndTime(appointment.getDate(), appointment.getTime());
         if (!appointments.isEmpty()){
             throw new InvalidEntityException(String.format("These date %s and time %s are already booked"

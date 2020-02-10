@@ -3,10 +3,7 @@ package com.fixit.domain;
 import com.fixit.dao.ExaminationRepository;
 import com.fixit.exception.InvalidEntityException;
 import com.fixit.exception.NonexistingEntityException;
-import com.fixit.model.Appointment;
-import com.fixit.model.Examination;
-import com.fixit.model.User;
-import com.fixit.model.Ward;
+import com.fixit.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -41,6 +38,8 @@ public class ExaminationServiceImpl implements ExaminationService {
     @Autowired
     private AppointmentService appointmentService;
 
+    @Autowired
+    private ResultService resultService;
 
     @Override
     public List<Examination> findAll() {
@@ -76,6 +75,9 @@ public class ExaminationServiceImpl implements ExaminationService {
                 throw new InvalidEntityException(String.format("Invalid date %s and time %s not match date %s and time %s of appointment"
                         , examination.getDate(), examination.getTime(), appointment.getDate(), appointment.getTime()));
             }
+            if(!appointment.getWard().getWardName().equals(examination.getWardName())){
+                throw new InvalidEntityException(String.format("Examination of type %s can't have according appointment of type of $s", examination.getWardName(), appointment.getWard().getWardName()));
+            }
             examination.setAppointment(appointment);
         }
         else{
@@ -87,12 +89,19 @@ public class ExaminationServiceImpl implements ExaminationService {
                 throw new InvalidEntityException(String.format("These date %s and time %s are already booked"
                         , examination.getDate(), examination.getTime()));
             }
+            examination.setAppointment(null);
         }
         return examinationRepository.save(examination);
     }
 
     @Override
     public Examination update(Examination examination) {
+        Optional<Examination> oldExamination = examinationRepository.findById(examination.getId());
+        if(!oldExamination.isPresent())
+        {
+            throw new NonexistingEntityException(String.format("There is no examination with id '%d'",examination.getId()));
+        }
+        examination.setResult(oldExamination.get().getResult());
         String status = examination.getStatus();
         if(!status.equals(OPEN) && !status.equals(PROCESSED) && !status.equals(PENDING) && !status.equals(CLOSED)) {
             throw new InvalidEntityException(String.format("Invalid status %s", status));
@@ -111,9 +120,25 @@ public class ExaminationServiceImpl implements ExaminationService {
                 throw new InvalidEntityException(String.format("Invalid date %s and time %s not match date %s and time %s of appointment"
                         , examination.getDate(), examination.getTime(), appointment.getDate(), appointment.getTime()));
             }
+            if(!appointment.getWard().getWardName().equals(examination.getWardName())){
+                throw new InvalidEntityException(String.format("Examination of type %s can't have according appointment of type of %s", examination.getWardName(), appointment.getWard().getWardName()));
+            }
             examination.setAppointment(appointment);
         }
-        //TODO result logic set result if status is closed
+        else {
+            examination.setAppointment(null);
+        }
+        if(!examination.getStatus().equals(CLOSED) && examination.getResultId() != null){
+            throw new InvalidEntityException(String.format("Not closed examinations don't have according result yet"));
+        }
+        if(examination.getStatus().equals(CLOSED) && examination.getResultId() == null){
+            throw new InvalidEntityException(String.format("Closed examinations should have according result"));
+        }
+        Result result = resultService.findById(examination.getResultId());
+        if(!result.getWard().getWardName().equals(examination.getWardName())){
+            throw new InvalidEntityException(String.format("Examination of type %s can't have according result of type of %s", examination.getWardName(), result.getWard().getWardName()));
+        }
+        examination.setResult(result);
         return examinationRepository.save(examination);
     }
 
