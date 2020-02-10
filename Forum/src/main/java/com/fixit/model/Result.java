@@ -3,8 +3,10 @@ package com.fixit.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fixit.constants.Constants;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -17,6 +19,7 @@ public class Result {
     private Long id;
 
     @Column(name = "description", nullable = true, length = 1000)
+    @Size(max = 1000, message = Constants.RESULT_DESCRIPTION_LENGTH)
     private String description;
 
     @ManyToOne

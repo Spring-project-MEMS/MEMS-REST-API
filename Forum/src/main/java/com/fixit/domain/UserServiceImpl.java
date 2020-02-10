@@ -1,5 +1,6 @@
 package com.fixit.domain;
 
+import com.fixit.constants.Constants;
 import com.fixit.dao.UserRepository;
 import com.fixit.exception.InvalidEntityException;
 import com.fixit.exception.NonexistingEntityException;
@@ -72,6 +73,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User add(User user) {
+        if(isEgnTaken(user.getEgn())){
+            throw new InvalidEntityException(Constants.EGN_TAKEN);
+        }
+        if(isUsernameTaken(user.getUsername())){
+            throw new InvalidEntityException(Constants.USERNAME_TAKEN);
+        }
+        if(isEmailTaken(user.getEmail())){
+            throw new InvalidEntityException(Constants.EMAIL_TAKEN);
+        }
         user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
@@ -143,5 +153,20 @@ public class UserServiceImpl implements UserService{
     @Override
     public long count() {
         return userRepository.count();
+    }
+
+    @Override
+    public boolean isUsernameTaken(String username) {
+        return this.userRepository.findOneByUsername(username) != null;
+    }
+
+    @Override
+    public boolean isEmailTaken(String email) {
+        return this.userRepository.findByEmail(email) != null;
+    }
+
+    @Override
+    public boolean isEgnTaken(String egn) {
+        return this.userRepository.findByEgn(egn) != null;
     }
 }

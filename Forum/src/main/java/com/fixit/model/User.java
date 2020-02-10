@@ -4,9 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fixit.constants.Constants;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -22,20 +26,29 @@ public class User implements UserDetails {
     @JsonView({Views.Appointment.class})
     private Long id;
 
+    @Size(min = 4, max = 30, message = Constants.PASSWORD_LENGTH)
     private String password;
 
+    @Size(min = 4, max = 20, message = Constants.USERNAME_LENGTH)
     @Column(unique = true)
     @JsonView({Views.Appointment.class})
     private String username;
 
+    @NotEmpty(message = Constants.ENTER_VALID_EMAIL)
+    @Email(message = Constants.ENTER_VALID_EMAIL)
     private String email;
 
+    @Size(max = 50, message = Constants.FIRST_NAME_LENGTH)
     @Column(name = "first_name", nullable = true, length = 50)
     @JsonView({Views.Appointment.class})
     private String firstName;
+
+    @Size(max = 50, message = Constants.LAST_NAME_LENGTH)
     @Column(name = "last_name", nullable = true, length = 50)
     @JsonView({Views.Appointment.class})
     private String lastName;
+
+    @Size(max = 20, message = Constants.EGN_LENGTH)
     @Column(name = "egn", unique = true, nullable = true, length = 20)
     @JsonView({Views.Appointment.class})
     private String egn;

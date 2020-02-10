@@ -14,4 +14,7 @@ public interface UserService  extends UserDetailsService {
     User update(User user);
     User remove(Long id);
     long count();
+    boolean isUsernameTaken(String username);
+    boolean isEmailTaken(String email);
+    boolean isEgnTaken(String email);
 }

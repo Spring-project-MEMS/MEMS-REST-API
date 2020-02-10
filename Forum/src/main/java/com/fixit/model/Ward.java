@@ -2,8 +2,10 @@ package com.fixit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fixit.constants.Constants;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
@@ -17,10 +19,12 @@ public class Ward {
 
     @Column(name = "ward_name", nullable = false, length = 50)
     @JsonView({Views.User.class, Views.Appointment.class})
+    @Size(min = 1, max = 50, message = Constants.WARD_NAME_LENGTH)
     private String wardName;
 
     @Column(name = "room_number", nullable = false, length = 20)
     @JsonView({Views.User.class, Views.Appointment.class})
+    @Size(min = 1, max = 30, message = Constants.ROOM_NUMBER_LENGTH)
     private String roomNumber;
 
     @OneToMany(
