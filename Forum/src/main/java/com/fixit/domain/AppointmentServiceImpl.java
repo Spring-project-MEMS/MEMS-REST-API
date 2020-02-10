@@ -98,7 +98,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         for (int i = 0; i <examinations.size() ; i++) {
             examinationService.remove(examinations.get(i).getId());
         }
-        appointmentRepository.deleteById(id);
+        //appointmentRepository.deleteById(id);
         return oldAppointments.get();
     }
 
