@@ -1,13 +1,8 @@
 package com.fixit.web;
 
-import com.fixit.domain.ResultBloodService;
-import com.fixit.domain.ResultIrmService;
-import com.fixit.domain.ResultService;
+import com.fixit.domain.*;
 import com.fixit.exception.InvalidEntityException;
-import com.fixit.model.Result;
-import com.fixit.model.ResultBlood;
-import com.fixit.model.ResultIrm;
-import com.fixit.model.User;
+import com.fixit.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +26,32 @@ public class ResultController {
     @Autowired
     private ResultIrmService resultIrmService;
 
+    @Autowired
+    private WardService wardService;
+
+    @Autowired
+    private UserService userService;
+
     @GetMapping
     public List<Result> getAllResults(){
         return resultService.findAll();
+    }
+
+    @GetMapping("/wards/{wardId}")
+    public List<Result> getAllResultsByWard(@PathVariable Long wardId)
+    {
+        Ward ward = wardService.findById(wardId);
+        return resultService.findAllByWard(ward);
+    }
+
+    @GetMapping("/patients/{patientId}")
+    public List<Result> getAllResultsByPatient(@PathVariable Long patientId)
+    {
+        User user = userService.findById(patientId);
+        if(!user.isPatient()){
+            throw new InvalidEntityException(String.format("There is no patient with id %s", patientId));
+        }
+        return resultService.findAllByPatient(user);
     }
 
     @GetMapping("{id}")

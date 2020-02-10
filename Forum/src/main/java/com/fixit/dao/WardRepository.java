@@ -15,5 +15,4 @@ public interface WardRepository extends JpaRepository<Ward, Long> {
     @Query(value = "SELECT ward_name FROM ward", nativeQuery = true)
     Set<String> findAllWardNames();
 
-    //Ward findAllByDate(String date);
 }

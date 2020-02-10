@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,36 @@ public class ExaminationServiceImpl implements ExaminationService {
     @Override
     public List<Examination> findAllByStatus(String status) {
         return examinationRepository.findAllByStatus(status);
+    }
+
+    @Override
+    public List<Examination> findAllByAppointment(Appointment appointment) {
+        return examinationRepository.findAllByAppointment(appointment);
+    }
+
+    @Override
+    public List<Examination> findAllByResult(Result result) {
+        return examinationRepository.findAllByResult(result);
+    }
+
+    @Override
+    public List<Examination> findAllByStatusAndPatient(String status, User patient) {
+        return examinationRepository.findAllByStatusAndPatient(status, patient);
+    }
+
+    @Override
+    public List<Examination> findAllByStatusAndWard(String status, Ward ward) {
+        return examinationRepository.findAllByStatusAndWard(status, ward);
+    }
+
+    @Override
+    public List<Examination> findAllByPatient(User patient) {
+        return examinationRepository.findAllByPatient(patient);
+    }
+
+    @Override
+    public List<Examination> findAllByWard(Ward ward) {
+        return examinationRepository.findAllByWard(ward);
     }
 
     @Override
@@ -143,6 +174,7 @@ public class ExaminationServiceImpl implements ExaminationService {
     }
 
     @Override
+    @Transactional
     public Examination remove(Long id) {
         Optional<Examination> oldExamination = examinationRepository.findById(id);
         if(!oldExamination.isPresent())

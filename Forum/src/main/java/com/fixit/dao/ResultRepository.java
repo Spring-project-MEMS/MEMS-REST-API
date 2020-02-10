@@ -5,11 +5,11 @@ import com.fixit.model.User;
 import com.fixit.model.Ward;
 
 import javax.transaction.Transactional;
-import java.util.Set;
+import java.util.List;
 
 @Transactional
 public interface ResultRepository extends BaseResultRepository<Result> {
-    Set<Result> findAllByPatient(User user);
-    Set<Result> findAllByWard(Ward ward);
+    List<Result> findAllByPatient(User user);
+    List<Result> findAllByWard(Ward ward);
 
 }

@@ -1,8 +1,12 @@
 package com.fixit.web;
 
 import com.fixit.domain.AppointmentService;
+import com.fixit.domain.UserService;
+import com.fixit.domain.WardService;
 import com.fixit.exception.InvalidEntityException;
 import com.fixit.model.Appointment;
+import com.fixit.model.User;
+import com.fixit.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,6 +22,12 @@ public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
+
+    @Autowired
+    private WardService wardService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public List<Appointment> getAllAppointments(){
@@ -44,6 +54,23 @@ public class AppointmentController {
     public Appointment getAppointmentById(@PathVariable Long id)
     {
         return appointmentService.findById(id);
+    }
+
+    @GetMapping("/wards/{wardId}")
+    public List<Appointment> getAllAppointmentsByWard(@PathVariable Long wardId)
+    {
+        Ward ward = wardService.findById(wardId);
+        return appointmentService.findAllByWard(ward);
+    }
+
+    @GetMapping("/patients/{patientId}")
+    public List<Appointment> getAllAppointmentsByPatient(@PathVariable Long patientId)
+    {
+        User user = userService.findById(patientId);
+        if(!user.isPatient()){
+            throw new InvalidEntityException(String.format("There is no patient with id %s", patientId));
+        }
+        return appointmentService.findAllByPatient(user);
     }
 
     @PutMapping("{id}")

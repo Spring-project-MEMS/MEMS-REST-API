@@ -4,11 +4,13 @@ import com.fixit.dao.AppointmentRepository;
 import com.fixit.exception.InvalidEntityException;
 import com.fixit.exception.NonexistingEntityException;
 import com.fixit.model.Appointment;
+import com.fixit.model.Examination;
 import com.fixit.model.User;
 import com.fixit.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,9 @@ public class AppointmentServiceImpl implements AppointmentService{
 
     @Autowired
     private  UserService userService;
+
+    @Autowired
+    private  ExaminationService examinationService;
 
     @Override
     public List<Appointment> findAll() {
@@ -82,11 +87,16 @@ public class AppointmentServiceImpl implements AppointmentService{
     }
 
     @Override
+    @Transactional
     public Appointment remove(Long id) {
         Optional<Appointment> oldAppointments = appointmentRepository.findById(id);
         if(!oldAppointments.isPresent())
         {
             throw new NonexistingEntityException(String.format("There is no appointments with id '%d'",id));
+        }
+        List<Examination> examinations = examinationService.findAllByAppointment(oldAppointments.get());
+        for (int i = 0; i <examinations.size() ; i++) {
+            examinationService.remove(examinations.get(i).getId());
         }
         appointmentRepository.deleteById(id);
         return oldAppointments.get();
@@ -101,5 +111,15 @@ public class AppointmentServiceImpl implements AppointmentService{
     public boolean checkAvailability(String date, String time) {
         List<Appointment> appointments = appointmentRepository.findAllByDateAndTime(date, time);
         return appointments.isEmpty();
+    }
+
+    @Override
+    public List<Appointment> findAllByPatient(User patient) {
+        return appointmentRepository.findAllByPatient(patient);
+    }
+
+    @Override
+    public List<Appointment> findAllByWard(Ward ward) {
+        return appointmentRepository.findAllByWard(ward);
     }
 }

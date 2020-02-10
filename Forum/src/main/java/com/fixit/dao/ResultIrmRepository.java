@@ -3,9 +3,9 @@ package com.fixit.dao;
 import com.fixit.model.ResultIrm;
 import com.fixit.model.User;
 import javax.transaction.Transactional;
-import java.util.Set;
+import java.util.List;
 
 @Transactional
 public interface ResultIrmRepository extends BaseResultRepository<ResultIrm> {
-    Set<ResultIrm> findAllByPatient(User user);
+    List<ResultIrm> findAllByPatient(User user);
 }
