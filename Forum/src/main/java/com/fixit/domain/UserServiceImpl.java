@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService{
         {
             throw new NonexistingEntityException(String.format("There is no user with id '%d'",user.getId()));
         }
-
+        user.setPassword(oldUser.get().getPassword());
         user.getAuthorities().forEach((role) -> {  Role existingRole = roleService.findById(role.getId());
             if (!existingRole.getAuthority().equals(role.getAuthority()))
             {throw new InvalidEntityException(String.format("Invalid role with authority %s", role.getAuthority()));}

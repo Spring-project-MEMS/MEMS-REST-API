@@ -107,7 +107,7 @@ public class ExaminationServiceImpl implements ExaminationService {
                         , examination.getDate(), examination.getTime(), appointment.getDate(), appointment.getTime()));
             }
             if(!appointment.getWard().getWardName().equals(examination.getWardName())){
-                throw new InvalidEntityException(String.format("Examination of type %s can't have according appointment of type of $s", examination.getWardName(), appointment.getWard().getWardName()));
+                throw new InvalidEntityException(String.format("Examination of type %s can't have according appointment of type of %s", examination.getWardName(), appointment.getWard().getWardName()));
             }
             examination.setAppointment(appointment);
         }
@@ -165,11 +165,16 @@ public class ExaminationServiceImpl implements ExaminationService {
         if(examination.getStatus().equals(CLOSED) && examination.getResultId() == null){
             throw new InvalidEntityException(String.format("Closed examinations should have according result"));
         }
-        Result result = resultService.findById(examination.getResultId());
-        if(!result.getWard().getWardName().equals(examination.getWardName())){
-            throw new InvalidEntityException(String.format("Examination of type %s can't have according result of type of %s", examination.getWardName(), result.getWard().getWardName()));
+        if(examination.getStatus().equals(CLOSED)){
+            Result result = resultService.findById(examination.getResultId());
+            if(!result.getWard().getWardName().equals(examination.getWardName())){
+                throw new InvalidEntityException(String.format("Examination of type %s can't have according result of type of %s", examination.getWardName(), result.getWard().getWardName()));
+            }
+            examination.setResult(result);
         }
-        examination.setResult(result);
+        else {
+            examination.setResult(null);
+        }
         return examinationRepository.save(examination);
     }
 

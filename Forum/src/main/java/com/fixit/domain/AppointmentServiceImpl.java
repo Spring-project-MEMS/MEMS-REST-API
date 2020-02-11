@@ -94,11 +94,15 @@ public class AppointmentServiceImpl implements AppointmentService{
         {
             throw new NonexistingEntityException(String.format("There is no appointments with id '%d'",id));
         }
+        boolean hasExam = false;
         List<Examination> examinations = examinationService.findAllByAppointment(oldAppointments.get());
         for (int i = 0; i <examinations.size() ; i++) {
             examinationService.remove(examinations.get(i).getId());
+            hasExam = true;
         }
-        //appointmentRepository.deleteById(id);
+        if(!hasExam){
+            appointmentRepository.deleteById(id);
+        }
         return oldAppointments.get();
     }
 

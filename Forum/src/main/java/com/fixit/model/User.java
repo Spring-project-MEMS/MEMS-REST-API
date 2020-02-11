@@ -26,7 +26,6 @@ public class User implements UserDetails {
     @JsonView({Views.Appointment.class})
     private Long id;
 
-    @Size(min = 4, max = 30, message = Constants.PASSWORD_LENGTH)
     private String password;
 
     @Size(min = 4, max = 20, message = Constants.USERNAME_LENGTH)
@@ -272,6 +271,7 @@ public class User implements UserDetails {
         return false;
     }
 
+    @JsonIgnore
     public boolean isPatient(){
         Iterator<Role> it = authorities.iterator();
         while(it.hasNext()){
